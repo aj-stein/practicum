@@ -1,0 +1,3 @@
+[submodule "proposal"]
+	path = proposal
+	url = https://github.com/aj-stein/practicum_proposal.git
