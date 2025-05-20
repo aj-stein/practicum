@@ -4,3 +4,6 @@
 [submodule "prototype"]
 	path = prototype
 	url = https://github.com/aj-stein/conmotion.git
+[submodule "vendor/csl"]
+	path = vendor/csl
+	url = https://github.com/citation-style-language/styles
