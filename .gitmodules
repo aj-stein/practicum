@@ -1,3 +1,6 @@
 [submodule "proposal"]
 	path = proposal
 	url = https://github.com/aj-stein/practicum_proposal.git
+[submodule "prototype"]
+	path = prototype
+	url = https://github.com/aj-stein/conmotion.git
