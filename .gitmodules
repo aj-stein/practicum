@@ -7,3 +7,6 @@
 [submodule "vendor/csl"]
 	path = vendor/csl
 	url = https://github.com/citation-style-language/styles
+[submodule "progress_reports"]
+	path = progress_reports
+	url = https://github.com/aj-stein/practicum_reports.git
