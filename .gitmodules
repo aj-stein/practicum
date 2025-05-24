@@ -10,3 +10,6 @@
 [submodule "progress_reports"]
 	path = progress_reports
 	url = https://github.com/aj-stein/practicum_reports.git
+[submodule "vendor/fedramp_marketplace_data"]
+	path = vendor/fedramp_marketplace_data
+	url = https://github.com/GSA/marketplace-fedramp-gov-data.git
