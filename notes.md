@@ -119,6 +119,17 @@ of the MUSA framework and it is devoted to continuously monitor and analyze mult
 
 #### Continuous assessment and assessment methodologies
 
+#### Quantitative metrics for cloud security
+
+- [@mireles19]
+  - However, the state-ofthe-art technology does not provide quantitative metrics that
+can measure how well cyber attackers or defenders are able to adapt or update their resources over time. We call this problem measuring cyber agility. (p. 3217)
+  - We propose a systematic set of quantitative metrics to measure cyber attack and defense evolution generations (or simply generations), which are cyber attack and defense updates that can be considered as “building blocks” or “atomic moves” used by cyber attackers and defenders in their operational practice. (p. 3217)
+ - The aforementioned dynamic view of cybersecurity metrics, which we pursue in the present paper, contrasts with the conventional static view of cybersecurity metrics as follows: the dynamic view reflects a system’s evolution over a period of time, while the static view captures measurements of metrics at a certain time point or in an aggregated way. (p. 3217)
+ - Since the effectiveness of attack and defense generations may not be adequately reflected by a single metric, we consider a suite of metrics that measure evolution generations from multiple perspectives. These metrics may be then aggregated using an appropriate method (e.g., a weighted average). (p. 3219)
+ - At a high level, we consider two dimensions of evolution: timeliness and effectiveness. Timeliness reflects the time it takes to evolve new generations while effectiveness reflects impacts of these generations. However, timeliness-oriented metrics can use effectiveness as a reference, and effectivenessoriented metrics can use time as a reference. Fig. 2 summarizes these metrics and the structural relationship between them. (p. 3220)
+ - First, the metrics require the defender to record the network traffic and/or computer execution traces in order to measure At(Dt) in retrospect, where t < t , t = t or t > t. This may not always be feasible, especially for high speed networks that generate a large volume of network traffic or complex applications that may incur concurrent executions. Nevertheless, this appears to be the only way to measure the response to new or zero-day attacks. (p. 3229)
+
 #### Continuous cloud monitoring
 
 - [@csa_cloud_risk20]
@@ -177,7 +188,7 @@ ment through monitoring programs’ behaviors and taking specific actions (e.g.,
   - The active auditing feature is an active-probing-based auditing solution which does not fully rely on the cloud provider for the audit data and instead actively participates in the targeted protocol to verify certain properties. (p. 16)
   - Literature review confirms need for out-of-band "auditing solution" to efficiently aggregrate and analyze results -> The key observations of this comparative study are as follows: First, there is no single auditing solution to verify multiple layers of the cloud. Therefore, today’s cloud tenants require at least three different solutions to fulfill their auditing need, which might not be very usable for the tenants. Second, even though intercept-and- check approach is designed to prevent security violations, existing works under this category are not practical due to their prohibitive delay. Third, the proactive auditing approach is a promising solution to overcome the limitations of both retroactive and intercept-and-check approach. However, this approach still suffers from several practical issues, such as relying on manual efforts and limiting the expressiveness of security properties. Finally, there exist several features in the wild which significantly can improve the efficiency and accuracy of the auditing solution. However, there is a need of a unified solution with all these features at least to overcome major constraints. In the next chapters, we present solutions to the above- mentioned limitations. (p. 16)
       
-- [@torkura2021]
+- [@torkura21]
   - Most of these attacks are caused by customer misconfigured cloud resources e.g. over-privileged users, publicly exposed databases, and lack of audit logging (MacDonald, 2019). (p. 1)
   - However, the upper layer of cloud infrastructure (control plane), which customers are responsible for securing has increasingly become vulnerable to attacks introduced by misconfigurations and human errors. According to Gartner, 99% of cloud failures will be directly caused by customer errors, until 2025. (p. 1)
   - For example, Cloud compute and cloud networks leverage traditional security control like firewalls and Intrusion Detection Systems (IDS) (Takabi et al., 2010) to enforce detective and preventive security controls. However, these security controls are ineffective for protecting some cloud services including cloud storage and IAM. (p. 2)
