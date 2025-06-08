@@ -1,4 +1,4 @@
-# Mutual Monitoring in the Cloud
+# Mutual Monitoring in the Cloud Outline
 
 ## Problem Statement
 
