@@ -1,5 +1,8 @@
 {
   "ignorePaths": [
     "**/*.bib"
+  ],
+  "words": [
+    "PUBP"
   ]
 }
