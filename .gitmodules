@@ -13,3 +13,6 @@
 [submodule "vendor/fedramp_marketplace_data"]
 	path = vendor/fedramp_marketplace_data
 	url = https://github.com/GSA/marketplace-fedramp-gov-data.git
+[submodule "critical_analysis"]
+	path = critical_analysis
+	url = https://github.com/aj-stein/practicum_conmon_analysis.git
