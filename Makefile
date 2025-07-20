@@ -17,9 +17,6 @@ $(FEDRAMP_DATA):
 %.pdf: %.tex
 	$(LATEXMK) -pdf -M -MP -MF $*.d $*
 
-%.pdf: %.md $(MARP_EXE)
-	$(NPX) $(MARP_PKG) $(MARP_ARGS) $< -o $@ --pdf-outlines
-
 mostlyclean:
 	$(LATEXMK) -silent -c
 	$(RM) *.bbl
