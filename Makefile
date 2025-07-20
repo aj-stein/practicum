@@ -36,7 +36,4 @@ clean: mostlyclean
 
 all: $(CSL_STYLE) $(FEDRAMP_DATA) clean notes.pdf paper.pdf
 
-clean:
-	$(RM) *.pdf
-
 .PHONY: all clean doc mostlyclean pdf
