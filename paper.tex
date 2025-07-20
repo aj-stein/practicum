@@ -8,7 +8,7 @@
 \thispagestyle{fancy}
 
 \begin{abstract}
-    Cloud computing infrastructure is essentially ubiquitous, but adoption is not without challenges. Cloud service providers must cater to customers in regulated sectors. Their use of popular cybersecurity frameworks create high barriers to entry. One barrier, often resulting in centralized bureaucracies, is the periodic monitoring of the provider's cybersecurity posture. By analyzing one prominent example, FedRAMP's Continuous Monitoring Program, this paper considers if such bureaucracies are the only valid solution. To refute this hypothesis, the paper presents an alternative architecture for multi-party monitoring of cloud services' cybersecurity posture, Mutual Monitoring.
+    Cloud computing infrastructure is essentially ubiquitous, but adoption is not without challenges. Cloud service providers must cater to customers in regulated sectors. Their use of popular cybersecurity frameworks create high barriers to entry. One barrier, often resulting in centralized bureaucracies, is the periodic monitoring of the provider's cybersecurity posture. By analyzing one prominent example, FedRAMP's Continuous Monitoring Program, this paper considers if such bureaucracies are the only valid solution. To refute this hypothesis, the paper presents an alternative architecture for multi-party monitoring of cloud services' cybersecurity posture, mutual monitoring.
 \end{abstract}
 
 \section{Introduction}
@@ -41,14 +41,9 @@ The impacts of manually curated data from FedRAMP's continuous monitoring extend
 
 \subsection{Solution}
 
-I will use this research to design and evaluate an alternative to centralized continuous monitoring, mutual monitoring. The foundation of mutual monitoring will be federated data services, known in other security use cases as \hyperlink{https://transparency.dev}{transparency services}. The positives and negatives of FedRAMP's continuous monitoring model will inform its design. Operating such services should change the economics, and thereby the behavior, of cloud service providers and their customers. A new architecture should incentivize auditors to sell value-add analytics via these federated data services, potentially obsoleting centralized authorities for continuous monitoring like FedRAMP. To validate this hypothesis, I propose the list of deliverables below, in addition to the final report summarizing their outcome. 
+The focus of this paper is an alternative solution to centralized continuous monitoring as exemplified by FedRAMP, mutual monitoring. Mutual monitoring facilitates federated data services with ledgers\footnote{Many associate the term ``ledger" primarily with cryptocurrency and popular blockchain solutions, such as Bitcoin and Ethereum. In computing, a ledger is ``tamper-resistant shared distributed ledger composed of temporally ordered and publicly verifiable transactions." \cite{bashir22} Transparency service implementers and standards authors employ the same fundamental concept, but use the term Append-only log, meaning ``a Statement Sequence comprising the entire registration history of the Transparency Service. To make the Append-only property verifiable and transparent." \cite{scitt25}. All are examples of distributed ledger technology.} of digitally signed data using an architecture popular for other security use cases, \hyperlink{https://transparency.dev}{transparency services}. The positives and negatives of FedRAMP's continuous monitoring model will inform its design. Operating such services can change the incentives, behavior, and thereby economics, of cloud service providers, auditors, and customers for true ``shared responsibility'' for cloud security monitoring. A new architecture should incentivize auditors to sell value-add analytics via these federated data services, potentially obsoleting centralized authorities for continuous monitoring like FedRAMP. To validate this hypothesis, I propose the list of deliverables below, in addition to the final report summarizing their outcome. 
 
-\begin{enumerate}
-    \item a critical analysis of FedRAMP's continuous monitoring model
-    \item an architecture specification for mutual continuous monitoring
-    \item prototype code for transparency services for mutual continuous monitoring
-    \item a quantitative cloud security measurement framework to use in the prototype
-\end{enumerate}
+To best explain the merits (and challenges) of mutual monitoring, the paper will provide an overview of past, present, and ongoing modernization of FedRAMP's continuous monitoring and overall processes. This context will inform the following section, that outlines the key elements of the proposed mutual monitoring architecture. And finally, the paper will conclude with a qualitative and quantitative evaluation of the solution, highlight key limitations, and identity future work to advance this solution.
 
 \section{Overview of Cloud Service Security Monitoring}
 
