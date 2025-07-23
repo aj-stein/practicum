@@ -21,7 +21,7 @@ Are these bureaucracies an optimal solution, or a last resort that fails to keep
 
 The cybersecurity of cloud services poses many challenges, but the inefficiency of continuous monitoring has systemic impact on the economics and timely, accurate risk modeling for heavily interconnected, interdependent systems built on cloud services. FedRAMP is a highly visible and representative example that other regulatory frameworks emulate, so any improvement or optimization will yield significant improvement to cloud service adoption across regulated industries.
 
-\subsection{Economic Impacts}
+\subsection{Economic Impacts} \label{economics}
 
 Although FedRAMP is a highly visible cloud security program, there is limited public data with details about costs and economic impact for providers, auditors, and customer agencies. However, industry estimates significant costs for all these stakeholders, even when considering global expenditure on cloud services.
 
@@ -33,7 +33,7 @@ FedRAMP processes require specialized tools and staff for all stakeholders. Anal
 
 Even with all this investment, the staff from cloud service providers, auditors, and agency customers experience strategic and operational bottlenecks for heavily interconnected cloud services, increasing ambiguity in a holistic view of cybersecurity posture in real-world composite systems for all parties involved, not only auditors. 
 
-Firstly, a centralized review process finalized by a small number of FedRAMP staff constitutes a single point of failure. As FedRAMP documents, cloud providers, auditors, and agency customers must use a single, centralized wiki site, USDA's connect.gov, \footnote{This system is essentially the same as max.gov, which the Office of Management and Budget handed off to the Department of Agriculture subsequently, which FedRAMP had used in the years prior. USDA \hyperlink{https://www.fedramp.gov/2023-11-13-usda-connect-update-to-fedramp-stakeholders/}{rebranded the system in 2023} during the transition.} and coordinate out of band with FedRAMP staff for final review \citeyear[pp.~3,14]{fedramp_auth_playbook25}. Paradoxically, providers and auditors get no guarantees for the cybersecurity posture of this system where they store data for FedRAMP's reviewers. There is no mutual monitoring or assurance. Access to this data on connect.gov is manually coordinated on an ad hoc basis, hindering sharing between different agency staff who need FedRAMP data, and even those outside these agencies focused on other regulatory frameworks. They rely on reciprocity guarantees to justify the use of FedRAMP authorization and continuous monitoring, which is not particularly feasible in practical terms given restricted access to this data.
+Firstly, a centralized review process finalized by a small number of FedRAMP staff constitutes a single point of failure. As FedRAMP documents, cloud providers, auditors, and agency customers must use a single, centralized wiki site, USDA's connect.gov, \footnote{This system is essentially the same as max.gov, which the Office of Management and Budget (OMB) handed off to the Department of Agriculture subsequently, which FedRAMP had used in the years prior. USDA \hyperlink{https://www.fedramp.gov/2023-11-13-usda-connect-update-to-fedramp-stakeholders/}{rebranded the system in 2023} during the transition.} and coordinate out of band with FedRAMP staff for final review \citeyear[pp.~3,14]{fedramp_auth_playbook25}. Paradoxically, providers and auditors get no guarantees for the cybersecurity posture of this system where they store data for FedRAMP's reviewers. There is no mutual monitoring or assurance. Access to this data on connect.gov is manually coordinated on an ad hoc basis, hindering sharing between different agency staff who need FedRAMP data, and even those outside these agencies focused on other regulatory frameworks. They rely on reciprocity guarantees to justify the use of FedRAMP authorization and continuous monitoring, which is not particularly feasible in practical terms given restricted access to this data.
 
 The impacts of manually curated data from FedRAMP's continuous monitoring extend beyond its stakeholders. Interrelated regulatory frameworks depend upon it. Given FedRAMP's rigorous review process, especially continuous monitoring, many providers and their auditors use artifacts from FedRAMP for equivalency, or reciprocity,as evidence for controls in other regulatory frameworks preferred by the defense \cite{dod_fedramp_memo23}, commercial \cite{orock21}, and finance sectors of the United States. Therefore, any optimization in FedRAMP's processes has second order effects on the quality, quantity, and speed of cloud security review methodologies across industry.
 
@@ -69,7 +69,7 @@ As promising as all of these solutions are, whether proactive, intercept-and-che
 
 The previous section identifies a wide variety of research into cloud security monitoring, but without explaining why there is practical industry interest in monitoring. A primary reason is that common cybersecurity frameworks, used by both cloud service providers and their customers, recommend or require periodic monitoring of their infrastructure. This section will identify those requirements in the most common cybersecurity frameworks.
 
-\subsubsection{NIST Risk Management Framework}
+\subsubsection{NIST Risk Management Framework} \label{rmf}
 
 NIST's Risk Management Framework (RMF), as the foundation FedRAMP used for its own design, has a very straightforward requirement for continuous monitoring. FedRAMP tailors the RMF (defined in NIST Special Publication 800-37) and its catalog of controls (defined in NIST Special Publication 800-53) for cloud services, whereas government requires RMF for many other systems, not just the cloud. Most tailored uses of RMF mandate implementation of control CA-7, requiring an organization to establish an continuous monitoring program \citeyear[pp.~90-91]{sp80053r5}.
 
@@ -87,7 +87,25 @@ The Center for Internet Security maintains a popular cybersecurity framework for
 
 \subsection{FedRAMP History and Continuous Monitoring}
 
+Per its official website, the Federal Risk Authorization and Risk Management Program, more popularly known as just FedRAMP, is ``a government-wide program that promotes the adoption of secure cloud services across the federal government by providing a standardized approach to security assessment, authorization, and continuous monitoring for cloud products and services'' \citeyear{fedramp_definition25}. Given the spending and impact of cloud services for the government's digital services as described in Section \ref{economics}, it is not surprising that the whole program has evolved many times over fourteen years, not just for the continuous monitoring portion.
+
+Therefore, it is important to highlight relevant history and the current state of FedRAMP continuous monitoring processes as it pertains to continuous monitoring.
+
 \subsubsection{History}
+
+Although the Federal Chief Information Officer formally established FedRAMP in 2011, it originated in 2009 with an interagency working group, the Cloud Computing Security Working Group, and its Federal Cloud Computing Initiative. The initiative sought to determine how to best perform security authorizations and, the central topic of this paper, continuous monitoring for multi-agency systems outsource to cloud service providers \cite[p.~239]{metheny17}. These problems were hardly new to government technologists or early cloud service providers, but what was novel with FedRAMP was the idea for a unified risk management and continuous monitoring program.
+
+To unify the varying information security and privacy management programs across the federal government, the original design focused on three areas: authorization, continuous monitoring, and federal security requirements \cite[p.~240]{metheny17}. This design based the single assessment by consistent application of the NIST RMF. As described in Section \ref{rmf}, the continuous monitoring approach embraced by FedRAMP, and later other cybersecurity frameworks, stems from its basis in the RMF. The fledging FedRAMP Program Management Office (PMO) announced this design publicly after eighteen months of stakeholder collaboration for public feedback in November 2010 \cite[p.~240]{metheny17}.
+
+After more collaboration, the Federal Chief Information Officer published the \textit{Security Authorization of Information Systems in Cloud Computing Environments}, formally establishing the initial organizational structure of FedRAMP and its methodology \cite[p.~241]{metheny17}. Not only did define the initial organizational structure, the memo instructed the PMO to create ``[i]n coordination with DHS, a framework for continuous monitoring, incident response and remediation, and FISMA reporting'' \citeyear[p.~3]{secauthmemo11}.
+
+There were many changes from 2011 to 2021, by FedRAMP's own admission, that ``focused on continued evolution — from redesigning processes to increasing transparency, or re-focusing on security while streamlining documentation,'' \citeyear{fedramp_blog_retrospective21}, but the general organizational structure and overall process remained the same.
+
+% \includegraphics{assets/process_pre20x.png}
+
+Significant organizational and process changes occurred in two phases for FedRAMP, the ``FedRAMP Act'' Phase and the ``20x Phase,'' respectively.
+
+From 2021 to 2022, Congress proposed legislation to fully codify FedRAMP into law and not only depend on the memoranda and executive directions from the Office of Management and Budget. By December 2022, the FedRAMP Act was integrated with the National Defense Authorization Act for Fiscal Year 2023 \cite{ndaa2023}. In FedRAMP's blog post, they hinted at ``additional information on how the Act may impact our stakeholders in the near future, including more information on the new Federal Secure Cloud Advisory Committee'' \citeyear{fedramp_blog_ndaa2023}. Soon after, FedRAMP and OMB
 
 \subsubsection{Continuous Monitoring}
 
