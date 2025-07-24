@@ -115,7 +115,7 @@ Despite the focused vision and speed in the PMO during the ``FedRAMP Act Phase,'
 
 Given the history and context of FedRAMP's Continuous Monitoring Program, a foundational component of a new cybernetic system, where people collaborate with well-designed technology, is an architecture. This section describes transparency services as a precedent and then the details of mutual monitoring architecture that employs transparency services.
 
-\subsection{Transparency Services for Other Use Cases}
+\subsection{Transparency Services for Other Use Cases} \label{use_cases}
 
 Although this paper proposes the use of transparency services for cloud service monitoring, there are several prominent use cases that precede it from adjacent security domains. Their efficacy and popularity for solving ``industry-grade'' monitoring challenges is further evidence it is viable for the cloud security monitoring use case.
 
@@ -126,6 +126,14 @@ After certificate transparency proved successful, implementers applied it to oth
 \subsection{Mutual Monitoring Transparency Service}
 
 To transform FedRAMP's continuous monitoring to mutual monitoring, cloud service providers, auditors, and agency customers must coalesce around tools that consistently orchestrate processes. The foundational building block for this consistency is the architecture specification. Although the specification is highly applicable to FedRAMP use cases, the specification is generic and not particular to FedRAMP. The sections below will highlight key elements of the full specification, included in Section \ref{architecture}, and relate it to FedRAMP's specific needs.
+
+\subsubsection{Document Format, Conventions, and Terminology}
+
+The mutual monitoring specification intentionally approximates, but does not explicitly use, the format that the Internet Engineering Task Force (IETF) prefers for its consensus and standardization process \citeyear{ietf_authors_format}. Given this stage in the research, it is premature to formally publish a draft as part of the Request for Comment process, and in doing so becomes the intellectual property of the IETF. Nonetheless, this specification is customizing a generic architecture from another IETF specification, so it is prudent to approximate this format for possible publication as an IETF Internet Draft at a later date. 
+
+This document extends and customizes the IETF Supply Chain Integrity, Transparency, and Trust (SCITT) Working Group's SCITT Architecture specification \citeyear{scitt25}. The SCITT architecture is distinct, but has significant overlap from the latest and original Certificate Transparency specifications, which are established IETF standards (\href{https://datatracker.ietf.org/doc/html/rfc9162}{RFC 9162} and \href{https://datatracker.ietf.org/doc/html/rfc6962}{IETF RFC 6962}, respectively). Moreover, approximating the IETF format with a tentative plan for IETF publication makes it approachable to implementers of related standards and the underlying normative references for transparency service building blocks, this approach is the most convenient.
+
+As it is approximating IETF style, it is important to call out the conventions and terminology. For an effective specification, not just for transparency services, this specification uses \href{https://datatracker.ietf.org/doc/html/rfc2119}{RFC 2119} keywords, which many standards authors outside of IETF have adopted as well. The specification also makes heavy use of capitalized terminology itemized in the terminology section, like other IETF documents, and refers the reader to the normative definitions elsewhere if possible. As is good practice, this specification references upstream normative documents, and does not repeat or reframe those sources. This specification only adds information to extend those upstream references.
 
 \subsection{Quantitative Framework}
 
