@@ -114,7 +114,7 @@ Despite the focused vision and speed in the PMO during the ``FedRAMP Act Phase,'
 \label{fig:conmon1}
 \end{figure}
 
-\subsubsection{20x, Looking Backwards and Forwards}
+\subsubsection{20x, Looking Backwards and Forwards} \label{20x}
 
 \section{Solution}
 
@@ -152,13 +152,6 @@ These use cases start simple, but the reader can consider advanced scenarios tha
 
 For the transparency service to be robust, it is important that it has a modular architecture to account for different performance tradeoffs and flexibility to only deploy the right components for a given use case. \href{https://aj-stein.github.io/conmotion/architecture.html#components}{This section of the specification} describes the components accordingly, inspired by the SCITT Architecture: the core transparency service and optional adjacency services.
 
-% \begin{figure}[h!]
-% \centering
-% \includegraphics[width=64mm,scale=0.50]{assets/arch_provider-only.png}
-% \caption{Mutual monitoring architecture components}
-% \label{fig:arch1}
-% \end{figure}
-
 The core transparency service contains sub-components to implement the minimally viable capabilities of an Append-Only Log. The first necessary sub-component is the Registration Policy API, which defines the list of allowed identities (in the form of X.509 digital certificates) permissible for signing Statements. If the Issuer's signing certificate, whether for a cloud provider or auditor, is not allowed in the Registration Policy, Registration fails. In this way, Issuer authentication and authorization originates from the Statement, not bespoke API mechanisms.
 
 When Issuers use another sub-component, the Submission API, any other form of authentication or authorization is not mandatory, simplifying integration. This API does not have to immediately return a receipt (i.e. a Statement countersigned by the Transparency Service itself). To support high throughput, the service will return a task ID and status for the client software, the Relying Party, to poll for. The Relying Party can then use the Entry API to look up tasks or existing Statements after Registration. 
@@ -169,7 +162,7 @@ One important consideration for scaling this architecture to efficiently process
 
 \subsubsection{Flows, Example Statements, and the Quantitative Framework}
 
-The \href{https://github.com/aj-stein/practicum/pull/1}{flow section} and \href{https://aj-stein.github.io/conmotion/architecture.html#example-statements}{example statements secton} of the appendix bring the architecture's building blocks together to demonstrate how multiple parties produce and consume measurements using a simple quantitative framework. In the data flows of the specification, a reader can understand how a cloud service provider integrates an existing inventory management system. As an Issuer, the cloud provider uses its Relying Party software to submit the original Statement (an inventory or configuration management event in the \href{https://schema.ocsf.io/}{Open Cybersecurity Schema Format}) to the cloud provider's own Adjacent Storage Service, which then pushes indexed fields to cloud provider's Adjacent Search Service, and returns the hash of the key fields. The Relying Party then uses its Certificate and Signing Key to digitally sign the hash and submit it to the cloud service provider's Transparency Service and the auditor's Transparency Service. The cloud service provider's Relying Party waits briefly for the Receipt of Registration from the auditor's transparency service. Once it receives that, it adds a new Transparent Statement, embedding the Receipt into the unprotected header of the original Signed Statement (with a hash as payload, not including the Receipt that did not yet exist). This approach allows the cloud provider to verifiably prove it detected the inventory event and had an auditor countersign it. 
+The \href{https://github.com/aj-stein/practicum/pull/1}{flow section} and \href{https://aj-stein.github.io/conmotion/architecture.html#example-statements}{example statements secton} of the appendix bring the architecture's building blocks together to demonstrate how multiple parties produce and consume measurements using a simple quantitative framework. In the data flows of the specification, a reader can understand how a cloud service provider integrates an existing inventory management system. As an Issuer, the cloud provider uses its Relying Party software to submit the original Statement (an inventory or configuration management event in the \href{https://schema.ocsf.io/}{Open Cybersecurity Schema Format}) to the cloud provider's own Adjacent Storage Service, which then pushes indexed fields to cloud provider's Adjacent Search Service, and returns the hash of the key fields.\footnote{In the ``20x Phase'' of FedRAMP, different community members demonstrated OSCAL capabilities, but the FedRAMP PMO distanced itself its previous OSCAL work and never tacitly endorsed any OSCAL-based solution after the cancellation of the platform project.} The Relying Party then uses its Certificate and Signing Key to digitally sign the hash and submit it to the cloud service provider's Transparency Service and the auditor's Transparency Service. The cloud service provider's Relying Party waits briefly for the Receipt of Registration from the auditor's transparency service. Once it receives that, it adds a new Transparent Statement, embedding the Receipt into the unprotected header of the original Signed Statement (with a hash as payload, not including the Receipt that did not yet exist). This approach allows the cloud provider to verifiably prove it detected the inventory event and had an auditor countersign it. 
 
 At this stage, the auditor's infrastructure will look for any inventory or configuration event that is anomalous and not initially reported by the cloud provider by checking provider's Adjacent Search Service and any hashes returned to confirm a finding that is not a false positive. If it detects changes the cloud provider made without notice, it appends Relying Party software uses its own key to make a record of this anomaly. Periodically, the auditor service will Register measurement events with quantitative measurements with the number of valid cloud provider records divided by the sum of cloud provider records and auditor findings from the epoch (i.e. when the provider registered its first inventory or configuration event) by sorting records based on the Issuers' signing keys.\footnote{At this time, the quantitative framework only measures from the epoch, or the first successful Registration of a Statement by a cloud provider in the auditor's Transparency Service, until present. In future designs, for a more complex and adaptive quantitative framework, the auditor's Relying Party can introspect its own Registration Policy to determine ad hoc requirements for the measurement payload, such a custom time range, freshness, or filtering requirements.}
 
@@ -179,9 +172,17 @@ For a customer agency building dashboards or analytics software, their Relying P
 
 \subsection{Method and Results}
 
+Evaluation of the mutual monitoring design took a two-pronged approach: modeling the development and operations costs of transparency services and qualitative surveys with different FedRAMP stakeholders.
+
+Additionally, I performed ten user experience interviews with FedRAMP stakeholders of various training, experience, and background. The questions were to measure agreement with themes of criticism gleaned from analyzing 20x forums as described in Section \ref{20x}. I compiled twenty five questions, each with answers mapping to Lichert Scale scores of -2, -1, 0, 1, and 2, with the range representing most negative to neutral to most positive outlook for answer sentiment. I also noted the rationale for each answer when offered. For participants, important features for future FedRAMP processes raw data submission; compositional data using from the providers of cloud providers; better significant change tracking; accurate third-party auditor measurement; better economic incentives; decentralization; and very strong support for improved digital signature support. Participants favored several architecture capabilities that are lacking in my current design, including confident and private data access and OSCAL-first data encoding. Therefore, I conclude from qualitative analysis that those interview would have good or fair, but not excellent, support for this architecture without future work focused on key limitations.
+
 \subsection{Limitations and Future Work}
 
+A key limitation of this research was obstacles in completing a prototype implementation in Python, which I intend to continue in the future. Additionally, qualitative analysis from survey answers highlight the urgency and importance for confidential data storage and privacy-preserving queries across party boundaries. In the long-term, survey interviews confirmed much more research is needed into the economic incentives for quantitative measurements that are based in business cases that would allow cloud services and auditors to differentiate themselves with transparency.
+
 \subsection{Conclusion}
+
+As one highly experienced FedRAMP stakeholder confided in an interview, what he most wants from FedRAMP in the future is ``continuous transparency,'' not the ``every thirty day transparency'' we currently have. This statement quite eloquently summarizes the challenges to FedRAMP and the need to replace human-driven bureaucracy for reviewing cybersecurity posture with a new approach that balances people, process, an, most importantly, tools. I believe the mutual monitoring architecture is a promising step in that direction.Future prototyping and evaluation of mutual monitoring services will incontrovertibly prove that these centralized bureaucracies are no longer a viable option.
 
 \bibliographystyle{apacite}
 \bibliography{references.bib}
@@ -203,5 +204,210 @@ To facilitate research for this project, I wrote a \href{https://github.com/aj-s
 As part of this research, I reviewed all archived posts from the 20x forum, as described in Section \ref{20x_archive} and coded each one to confirm if there was relevant criticism for pre-20x FedRAMP processes, specifically continuous monitoring. If so, I organized each one into one or more thematic buckets to inform the design of the mutual monitoring service.
 
 The coded posts labelled by theme can be found in \href{https://gist.github.com/aj-stein/ffa8bdbe5674a59159d4850aa16fb142}{this GitHub Gist}.
+
+\subsection{User Experience Interview Questions} \label{questionnaire}
+
+\begin{enumerate} 
+    \item How effective is the current max.gov/connect.gov approach for uploading data to FedRAMP? Have you ever requested to see it security package? If so, did you gain access?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How well do current FedRAMP processes (prior to March 2025) enable a cloud service provider to use information from other providers they leverage in their product to implement and document their security posture?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to a consuming CSP to directly use and share information from other providers they leverage?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How well do current FedRAMP processes (prior to March 2025) support submission of raw data (e.g. security scanner outputs) in authorization and continuous monitoring processes?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to support submission of raw data for authorization and continuous monitoring?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to support to summarization and linking raw data for authorization and continuous monitoring with submitting it?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How important is OSCAL to your use case with FedRAMP and its current processes (prior to March 2025)?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How important is OSCAL to your use case with FedRAMP modernized processes?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in supporting your use cases with digital signatures and other digital forms of trust and/or verification?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How often did you use digital signatures for current FedRAMP processes (before March 2025)?
+    \begin{enumerate}
+        \item [-2] Very infrequently
+        \item [-1] Infrequently
+        \item  [0] Neither frequently nor infrequently
+        \item  [1] Frequently 
+        \item  [2] Very frequently
+    \end{enumerate}
+    \item How important are digital signatures and other digital verification methods for your use cases in FedRAMP's modernized processes?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in facilitating the use of common security scanning techniques to accurately identify vulnerabilities in a cloud service provider's infrastructure?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to better support common security scanning techniques to accurately describe cloud service provider's infrastructure?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in submitting and tracking significant change requests in progress and over the history of the system?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to facilitate easily submitting and easily tracking significant change requests in progress and over the history of the system?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in managing and communicating vulnerability management information?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to facilitate clear communication of a service's current vulnerability management and its historical trends?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in securing sensitive data and keeping it confidential?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to secure sensitive data and keep it confidential?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes in identifying and measuring 3PAO performance for past and present assessments?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to identify and measure 3PAO performance for past and present assessments?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in economically incentivizing CSPs to maintain an authorization?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to incentivize CSPs economically to maintain authorizations?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are current FedRAMP processes in centralized management of continuous monitoring data?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP processes to decentralize management of continuous monitoring data?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+\end{enumerate}
 
 \end{document}
