@@ -107,7 +107,12 @@ Despite the focused vision and speed in the PMO during the ``FedRAMP Act Phase,'
 
 \subsubsection{Continuous Monitoring} \label{conmon}
 
-% \includegraphics{assets/process_pre20x.png}
+\begin{figure}[h!]
+\centering
+\includegraphics{assets/process_pre20x.png}
+\caption{FedRAMP processes before 20x}
+\label{fig:conmon1}
+\end{figure}
 
 \subsubsection{20x, Looking Backwards and Forwards}
 
@@ -135,7 +140,38 @@ This document extends and customizes the IETF Supply Chain Integrity, Transparen
 
 As it is approximating IETF style, it is important to call out the conventions and terminology. For an effective specification, not just for transparency services, this specification uses \href{https://datatracker.ietf.org/doc/html/rfc2119}{RFC 2119} keywords, which many standards authors outside of IETF have adopted as well. The specification also makes heavy use of capitalized terminology itemized in the terminology section, like other IETF documents, and refers the reader to the normative definitions elsewhere if possible. As is good practice, this specification references upstream normative documents, and does not repeat or reframe those sources. This specification only adds information to extend those upstream references.
 
-\subsection{Quantitative Framework}
+\subsubsection{Use Cases}
+
+Like other IETF drafts, crisp, relevant use cases are integral to an effective specification. Although seemingly generic, these two use cases \href{https://aj-stein.github.io/conmotion/architecture.html#use-cases}{in this section of the document} are specifically chosen for their relevance to FedRAMP and an improved alternative to the current continuous monitoring process.
+
+As explained in more detail in Section \ref{conmon}, capable, successful cloud service providers who perform continuous monitoring well require a solid foundation in inventory management. Incomplete coverage, inconsistency, and poor labelling are not uncommon for cloud service providers of all sizes and maturiy in the current FedRAMP process. Having auditable, digitally signed records from a provider of its inventory sent for each creation, modification, and deletion event will mitigate all three of these challenges in inventory management. Additionally, current third-party auditors for FedRAMP are very familiar with the necessity and scanning techniques to detect publicly available infrastructure, potentially the creation, modification, or deletion of inventory items that cloud service provider did not report. This possible delta, or potential lack thereof, is an easily understandable for measuring inventory coverage as part of the quantitative framework.
+
+Similarly, the configuration management use case is foundational to capable, successful cloud service providers who perform well in the current continuous monitoring process. In the case of FedRAMP, this use case builds upon the previous inventory management use case. During annual assessments, and particularly for significant change requests, providers and auditors must work with FedRAMP PMO staff and the customer agency to articulate what changes happen to the system for new or updated components of a cloud service. Quite often, the actual units of that infrastructure, the inventory, and the configuration management that must orchestrate them, are manually curated and completely disjoint. So the ability for third-party auditors to measure changes to publicly scannable inventory and retrieve information about added, modified, or deleted configurations will be a significant improvement.
+
+Another useful property of these use cases, albeit not explicitly stated in the specification by design, is that they lend themselves to reciprocal, mutual monitoring of each party's infrastructure. The different parties, with similar infrastructure, can invert their roles accordingly.
+
+The primary scenario is for a cloud service provider to contract with one or more third-party auditors to monitor their infrastructure. Once established and multiple adopters implement these services, cloud service providers can implement more advanced scenarios. For example, the cloud provider can play the role of the auditor in later interactions: they may condition permission to access to more detailed security information for a potential customer agency based upon their scored performance of that agency's infrastructure from quantitative framework measurements. A ``leveraged'' cloud service provider (i.e. a the cloud provider that is vendor to a downstream cloud provider) can condition access to their security data upon the performance of this new cloud provider with their new infrastructure instead of a centralized government review scoped to only federal and military staff.
+
+\subsubsection{Architecture Components}
+
+For the transparency service to be robust, it is important that it has a modular architecture to account for different performance tradeoffs and flexibility to only deploy the right components for a given use case. \href{https://aj-stein.github.io/conmotion/architecture.html#components}{This section of the specification} describes the components accordingly, inspired by the SCITT Architecture: the core transparency service and optional adjacency services.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=64mm,scale=0.50]{assets/arch_provider-only.png}
+\caption{Mutual monitoring architecture components}
+\label{fig:arch1}
+\end{figure}
+
+The core transparency service contains sub-components to implement the minimally viable capabilities of an Append-Only Log. The first necessary sub-component is the Registration Policy API, which defines the list of allowed identities (in the form of X.509 digital certificates) permissible for signing Statements. If the Issuer's, be it the cloud provider or auditor, uses a X.509 certificate that is not in the Registration Policy, the Transparency Service will reject the record. In this way, authentication and authorization is bound to the Statement submitted, not custom API authentication mechanisms.
+
+When Issuers use another sub-component, the Submission API, any other form of authentication or authorization is not mandatory, simplifying integration. This API does not have to immediately return a receipt (i.e. a Statement countersigned by the Transparency Service itself). To support high throughput, the service will return a task ID and status for the client software, the Relying Party, to poll for. The Relying Party can then use the Entry API to look up tasks or existing Statements after Registration. 
+
+The final component of the core is the Entry API. This final sub-component is to look up registered records. The Append-Only Log allows for bulk lookups to ``replay the log'' for consistency proofs (no tampering has occurred on the sequence of statements about inventory or configuration items). More commonly, Relying Parties will perform inclusion proofs (lookups for individual records is in the log to confirm they exist at a particular order in the sequence). As mentioned above, the Entry API also implements a task lookup functionality for Relying Parties to poll for the status of Registration for a given Statement. By combining all three sub-components, cloud service providers or auditors can check submission requirements, submit, and look up existing records for proof of existence.
+
+One important consideration for scaling this architecture to efficiently process millions of Statements is Adjacent Services to store and query the full payload of the data independently from the core Transparency Service. In a simpler version of the architecture, the whole inventory or configuration record is signed and submitted. With this more modular architecture, the Relying Party opts to submit the payload itself to an Adjacent Storage Service. The service will store the raw data of payload, and return a hash formed from key record elements (the inventory identifier or configuration identifier). The Adjacent Search Service will be deployed with the Storage Service to perform reverse lookups for query matches and returning the hash that positively matches the arguments for queries. This keeps the size of the signed payload of the Statement lean and custom or advanced query features out of the high-bandwidth core system for submitting Statements as well as only performing consistency and inclusion proofs.
+
+\subsubsection{Flows, Example Statements, and the Quantitative Framework}
 
 \section{Evaluation}
 
