@@ -36,6 +36,7 @@ labelfont=bf]{caption}        % Set caption to correct size and location
 \RequirePackage{pdflscape}
 \RequirePackage{xltabular}
 \RequirePackage{pdfpages}
+\RequirePackage[numbib]{tocbibind}
 
 % --- Setup parameter indentation --- %
 \setlength{\parindent}{0pt}
