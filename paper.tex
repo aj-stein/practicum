@@ -91,7 +91,7 @@ Therefore, it is important to highlight relevant history and the current state o
 
 \subsubsection{History} \label{fedramp_history}
 
-Although the Federal Chief Information Officer formally established FedRAMP in 2011, it originated in 2009 with an interagency working group, the Cloud Computing Security Working Group, and its Federal Cloud Computing Initiative. The initiative sought to determine how to best perform security authorizations and, the central topic of this paper, continuous monitoring for multi-agency systems outsourced to cloud service providers \cite[p.~239]{metheny17}. These problems were hardly new to government technologists or early cloud service providers, but what was novel with FedRAMP was the idea for a centralized risk management and continuous monitoring program.
+The Federal Chief Information Officer formally established FedRAMP in 2011. The goal of FedRAMP was to determine how to best perform security authorizations and, the central topic of this paper, continuous monitoring for multi-agency systems outsourced to cloud service providers \cite[p.~239]{metheny17}. These problems were hardly new to government technologists or early cloud service providers, but what was novel with FedRAMP was a centralized risk management and continuous monitoring program.
 
 To unify the varying information security and privacy management programs across the federal government, the original design focused on three areas: authorization, continuous monitoring, and federal security requirements \cite[p.~240]{metheny17}. This design based the ``assess once, reuse anywhere in government'' model by adapting the NIST RMF. As described in Section \ref{rmf}, the continuous monitoring approach embraced by FedRAMP, and later other cybersecurity frameworks, stems from its basis in the RMF. The fledging FedRAMP Program Management Office (PMO) announced this design publicly after eighteen months of stakeholder collaboration for public feedback in November 2010 \cite[p.~240]{metheny17}.
 
@@ -180,7 +180,7 @@ Additionally, I performed ten user experience interviews with FedRAMP stakeholde
 
 \subsection{Limitations and Future Work}
 
-A key limitation of this research was obstacles in completing a prototype implementation in Python, which I intend to continue in the future. Additionally, qualitative analysis from survey answers highlight the urgency and importance for confidential data storage and privacy-preserving queries across party boundaries. In the long-term, survey interviews confirmed much more research is needed into the economic incentives for quantitative measurements that are based in business cases that would allow cloud services and auditors to differentiate themselves with transparency.
+A key limitation of this research was an incomplete prototype implementation in Python,\footnote{To review the code, please see Section \ref{prototype} in the appendix.} which I intend to continue in the future. Additionally, qualitative analysis from survey answers highlight the urgency and importance for confidential data storage and privacy-preserving queries across party boundaries. In the long-term, survey interviews confirmed much more research is needed into the economic incentives for quantitative measurements that are based in business cases that would allow cloud services and auditors to differentiate themselves with transparency.
 
 \subsection{Conclusion}
 
@@ -194,6 +194,10 @@ As one highly experienced FedRAMP stakeholder confided in an interview, what he 
 \subsection{Mutual Monitoring Architecture} \label{architecture}
 
 The complete architecture specification is accessible at \href{https://aj-stein.github.io/conmotion/architecture.html}{aj-stein.github.io/conmotion}. Additionally, readers can download \href{https://aj-stein.github.io/conmotion/architecture.pdf}{a copy of the specification in PDF format} for offline reading.
+
+\subsection{Initial Prototype Source Code} \label{prototype}
+
+Although incomplete, the code for the initial prototype is saved alongside the specification in the \href{https://github.com/aj-stein/conmotion/tree/main/conmotion}{github.com/aj-stein/conmotion repository on GitHub}.
 
 \subsection{20x Forum Archive} \label{20x_archive}
 
