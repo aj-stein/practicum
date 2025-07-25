@@ -1,0 +1,441 @@
+\documentclass{jdf}
+
+\begin{document}
+\title{Mutual Monitoring in the Cloud}
+\author{A.J. Stein \\ Georgia Institute of Technology \\ astein38@gatech.edu}
+
+\maketitle
+\thispagestyle{fancy}
+
+\begin{abstract}
+    Cloud computing infrastructure is essentially ubiquitous, but adoption is not without challenges. Cloud service providers must cater to customers in regulated sectors. Their use of popular cybersecurity frameworks create high barriers to entry. One barrier, often resulting in centralized bureaucracies, is the periodic monitoring of the provider's cybersecurity posture by way of scanning for inventory, configuration, and vulnerability management gaps. By analyzing one prominent example, FedRAMP's Continuous Monitoring Program, this paper considers if such bureaucracies are the only valid solution. To refute this hypothesis, the paper presents an alternative architecture for multi-party monitoring of cloud services' cybersecurity posture, mutual monitoring.
+\end{abstract}
+
+\section{Introduction}
+
+Cloud computing infrastructure is essentially ubiquitous, but adoption is not without challenges. Cloud service providers must cater to customers in regulated sectors, complying with cybersecurity frameworks that create high barriers to entry. One barrier is ongoing monitoring of the provider's cybersecurity posture, often resulting in centralized bureaucracies. FedRAMP oversees and documents a prominent example of such a program, the Continuous Monitoring Program \citeyear[p.~14]{fedramp_auth_playbook25}.
+
+Are these bureaucracies an optimal solution, or a last resort that fails to keep pace with cloud technology as it proliferates and evolves? If they are a last resort, is there a better way? This paper presents an alternative, the mutual monitoring architecture, as a measurably more effective solution.
+
+\subsection{Why Does This Problem Matter?}
+
+The cybersecurity of cloud services poses many challenges, but the inefficiency of continuous monitoring has systemic impact on the economics and timely, accurate risk modeling for heavily interconnected, interdependent systems built on cloud services. FedRAMP is a highly visible and representative example that other regulatory frameworks emulate, or sometimes indirectly depend upon, so any improvement or optimization will yield significant improvement to cloud service adoption across regulated industries.
+
+\subsection{Economic Impacts} \label{economics}
+
+Although FedRAMP is a highly visible cloud security program, there is limited public data with details about costs and economic impact for providers, auditors, and customer agencies. However, industry estimates significant costs for all these stakeholders, even when considering global expenditure on cloud services.
+
+Gartner estimates that global spending on cloud infrastructure in 2024 was \$595.7 billion dollars \citeyear{gartner24}. The think tank CSIS estimates that the United States government spent \$17 billion of its total \$130 billion dollar IT budget in 2024 on cloud services alone \citeyear[p.~1]{csis25}. Although federal agencies are not fully compliant with FedRAMP's requirements mandated in the FedRAMP Authorization Act, the long-term goal is maximal oversight over the cloud building blocks of this seventeen billion dollar investment. And continuous monitoring is a sizable component of this investment.
+
+FedRAMP processes require specialized tools and staff for all stakeholders, adding cost and friction. Analysts at stackArmor estimate that a FedRAMP authorization costs a provider \$250,000 to \$750,000 dollars, and continuous monitoring support constitutes from \$100,000 to \$400,000 of that amount \citeyear{stackarmor24}. Given this conservative estimate, any improvement or optimization can benefit all stakeholders in reducing \$42,600,000 spent, but potentially a much larger sum.
+
+\subsection{Cybersecurity Impacts}
+
+Even with all this investment, the staff from cloud service providers, auditors, and agency customers experience strategic and operational bottlenecks for heavily interconnected cloud services, increasing ambiguity in a holistic view of cybersecurity posture in real-world composite systems for all parties involved, not only auditors. 
+
+Firstly, a centralized review process finalized by a small number of FedRAMP staff constitutes a single point of failure. As FedRAMP documents, cloud providers, auditors, and agency customers must use a single, centralized wiki site, USDA's connect.gov, \footnote{This system is essentially the same system as max.gov. The Office of Management and Budget (OMB) handed off its management to the Department of Agriculture (USDA) in 2023. The USDA \href{https://web.archive.org/web/20250617003410/https://www.fedramp.gov/2023-11-13-usda-connect-update-to-fedramp-stakeholders/}{subsequently re-branded the system} during the transition, but FedRAMP has continuously used it.} and coordinate out of band with FedRAMP staff for final review \citeyear[pp.~3,14]{fedramp_auth_playbook25}. Paradoxically, providers and auditors get no guarantees for the cybersecurity posture of this system where they store data for FedRAMP's reviewers.\footnote{FedRAMP's \href{https://web.archive.org/web/20250710063213/https://www.fedramp.gov/assets/resources/documents/Agency_Package_Request_Form.pdf}{official package access request form} indicates only employees with email addresses for a government or military domain may request access. Staff from cloud providers or auditors not actively assigned to government or military contracts cannot even initiate these requests for a package.} There is no mutual monitoring or assurance. Access to this data on connect.gov is manually coordinated on an ad hoc basis, hindering sharing between different agency staff who need FedRAMP data. Those outside these agencies focused on other regulatory frameworks who want it cannot access it. They rely on reciprocity guarantees to justify the use of FedRAMP authorization and continuous monitoring, which is practically infeasible without this prerequisite data.
+
+The impacts of manually curated data from FedRAMP's continuous monitoring extend beyond its stakeholders. Interrelated regulatory frameworks depend upon it. Given FedRAMP's rigorous review process, especially continuous monitoring, many providers and their auditors use artifacts from FedRAMP for assurance (or less formal ``reciprocity'') with other regulatory frameworks preferred by the defense \cite{dod_fedramp_memo23}, commercial \cite{orock21}, and finance sectors of the United States. Therefore, any optimization in FedRAMP's processes has second order benefits for cloud security across industry.
+
+\subsection{Solution}
+
+The focus of this paper is an alternative solution to centralized continuous monitoring as exemplified by FedRAMP, mutual monitoring. Mutual monitoring facilitates federated data services with ledgers\footnote{Many associate the term ``ledger" primarily with cryptocurrency and their popular underlying blockchain implementations, such as Bitcoin and Ethereum. In computing, a ledger is ``tamper-resistant shared distributed ledger composed of temporally ordered and publicly verifiable transactions" \cite{bashir22}. Transparency service implementers and standards authors employ the same fundamental concept, but use the interchangeable term Append-only Log, which they define as ``a Statement Sequence comprising the entire registration history of the Transparency Service. To make the Append-only property verifiable and transparent" \cite{scitt25}. All are examples of distributed ledger technology.} of digitally signed data using an architecture popular for other security use cases, \href{https://transparency.dev}{transparency services}. The positives and negatives of FedRAMP's continuous monitoring model will inform its design. Transforming to a mutual monitoring model can change the incentives, behavior, and thereby economics, of cloud service providers, auditors, and customers for true ``shared responsibility'' for the security of cloud services.\footnote{FedRAMP, like many cloud security programs, asserts that ``[t]here is a shared security responsibility model when using cloud products. Cloud service providers (CSPs) and customers (agencies or leveraging CSPs) both assume important security roles and responsibilities to ensure data is protected within cloud environments'' \citeyear{fedramp_srm25}. As practical as it sounds, there are many concerns and criticisms on how to meaningfully realize the shared responsibility model, which has direct implications on the current continuous monitoring process and the mutual monitoring model proposed in this paper.} This new architecture can incentivize auditors to sell value-add analytics via these federated data services, obsoleting centralized authorities for continuous monitoring, like FedRAMP, and a market of inconsistent third-party auditors required to support them. To validate this hypothesis, I present a viable alternative in the form of my architecture for mutual monitoring.
+
+To best explain the merits (and challenges) of mutual monitoring, the paper will provide an overview of past, present, and ongoing modernization of FedRAMP's continuous monitoring and how it relates to the ``whole'' of ``getting FedRAMP authorized.'' This context will inform the following section, that outlines the key elements of the proposed mutual monitoring architecture. And finally, the paper will conclude with a qualitative and quantitative evaluation of the solution, highlight key limitations, and identity future work to advance this solution.
+
+\section{Background}
+
+\subsection{Overview of Cloud Service Security Monitoring}
+
+Despite the prominence of FedRAMP in cloud security inside and outside of government,\footnote{As ORock analysts note, FedRAMP is not required for customers outside of the federal government, but is still popular as an important signal for vetting cloud services in other regulated environments nonetheless \citeyear{orock21}.} there is a body of work from different academic and industry experts with a variety of approaches to cloud security monitoring. As FedRAMP evolved, these different approaches evolved alongside of it. The following section discusses relevant highlights to current challenges to FedRAMP's continuous monitoring approach and the proposed mutual monitoring solution.
+
+\subsubsection{Academic Research in Cloud Security Monitoring}
+
+Over the last decade, academic researchers have affirmed the fundamentals of cloud deployment and security properties. Much literature uses the same taxonomy as Majumdar and his co-authors for cloud security auditing as reactive, intercept-and-check, or proactive \citeyear[pp.~9-13]{majumdar19}. Nonetheless, this research does not focus on transparency services or similar solutions to audit or monitor security information with the express goal of externally communicating this information from the cloud service providers' operators to external customers.\footnote{Both academia and industry, based on my literature survey, often conflate auditing and monitoring to have the same meaning in the cloud security domain.}
+
+In their survey, Ramachandra and his colleagues identify a key property to security and risk exposure of cloud infrastructures past and present: the two most important aspects in determining impact and exposure to vulnerabilities is the choice of deployment (e.g. public or private) and delivery model (e.g. Infrastructure-as-a-Service (IaaS); Platform-as-a-Service (PaaS); Software-as-a-Service (Saas)) \citeyear[p.~468]{ramachandra17}. This research focuses primarily on public deployment for the various delivery models. According to this research, this subset experiences heightened security challenges due to a large customer footprint, management of publicly available resources, and a multitude of external factors outside of their immediate control, including legislation and data protection laws \cite[p.468]{ramachandra17}. The matrix of cloud deployment models and security responsibility still holds true today, in that customers bare more responsibility with IaaS to shape their own infrastructure accordingly. Conversely, PaaS to a great extent, and SaaS to the greatest extent, burden the cloud providers with securing the system, not the customer. \cite[p.~469]{ramachandra17}. Interestingly, in this 2017 survey there is no mention of monitoring, coordination, or transparency about security posture with well-informed customers as an impact or challenge in current literature and practice. The paper does not list them as defensible controls or counter-measures either.
+
+Similarly, older surveys of cloud monitoring (not just specifically to security), such as one from Aceto and his colleagues, do not identify these themes or trends relevant to security monitoring for multi-tenant cloud customers \citeyear{aceto13}.
+
+Hakani and Mann have a more current survey for cloud security mechanisms, confirming deployment types and models have not much changed, but expounding more on updated detailed security threats and techniques for cloud data security, cloud firewalling, and cryptographic key management \citeyear{hakani22}. Although there is hardly any discussion of research of monitoring or coordination between cloud provider, auditor, or customer, this survey does allude to their absence as a significant challenge stating that ``both customers and providers face several security concerns and issues. Such issues may make it harder for customers as well as suppliers to believe one another'' \citeyear[p.~475]{hakani22}.
+
+Although general surveys do not focus on the challenges of transparently communicating cloud security information external to service operators, or solutions similar to transparency services, there is a wide variety of proposed strategies and techniques for cloud service operators to internally monitor and remediate cloud security weaknesses. Majumdar and his colleagues advocate for proactive auditing with a system supported by formal methods to detect security violations from events and recycling verification results to restore policies \citeyear[p.~2518]{majumdar22}. The design of Aldribi and his team employs underlying hardware isolation to empower customers to independently configure and monitor their own systems accordingly in complex multi-tenant environments \citeyear{aldribi15}. Carvallo and other researchers present a design for a comprehensive security assurance platform with network, system, and application monitoring sensors for internal reporting \citeyear{carvallo17}. Torkura and his colleagues have their own novel solution for monitoring misconfigurations with their CSBAuditor, using transition analysis and the reconciler pattern, \citeyear{torkura21}. Nonetheless, all these solutions predominantly focus on a cloud provider's internal coordination and mitigation.
+
+As promising as all of these solutions are, whether proactive, intercept-and-check, or reactive, no solution takes a similar multi-party approach to mutual monitoring.
+
+\subsubsection{Cybersecurity Frameworks and Cloud Security Monitoring}
+
+The previous section identifies a wide variety of research into cloud security monitoring, but without explaining why there is practical industry interest in monitoring. A primary reason is that common cybersecurity frameworks, used by cloud service providers, their auditors, and their customers alike, recommend or require periodic monitoring of their infrastructure. This section will identify those requirements in the most common cybersecurity frameworks.
+
+\subsubsection{CIS Critical Security Control}
+
+The Center for Internet Security maintains a popular cybersecurity framework for industry best practices applicable to wide spectrum of companies, with a focus on simplicity and ease of implementation. One of their only eighteen Critical Security Controls is CSC-7, which requires continuous vulnerability management \citeyear{csc18}.
+
+\subsubsection{Cloud Security Alliance Cloud Controls Matrix}
+
+The Cloud Security Alliance (CSA) is a reputable organization that promulgates security guidance for cloud service providers, including their own cybersecurity framework, the Cloud Control Matrix (CCM). The CSA maintains a registry, \href{https://cloudsecurityalliance.org/star/registry}{STAR}, for certified providers that meet different maturity levels for their implementation of the CCM controls. In 2024, CSA published STAR Level 3, which requires continuous monitoring for their new highest maturity level \citeyear{csa_starl3_21}.
+
+\subsubsection{ISO/IEC 27001:2022}
+
+The International Organization for Standardization (ISO) is a voluntary standards body that promulgates standards for many nations, unlike the previous examples that are predominantly focused on the United States. ISO 27001:2022, their framework for building information security management systems, has control Appendix A 8.16, which recommends continuous monitoring \citeyear{iso27001_22}.
+
+\subsubsection{NIST Risk Management Framework} \label{rmf}
+
+As detailed in Section \ref{fedramp_history}, the NIST Risk Management Framework is the foundation of FedRAMP program's design. FedRAMP's staff have tailored the RMF's life-cycle and process framework (defined in NIST Special Publication 800-37) with its catalog of controls (defined in NIST Special Publication 800-53) specifically for cloud services. Additionally, most government agencies require RMF for many other systems, not just those deployed with cloud services.\footnote{As NIST explains in Special Publication 800-53, the use of these controls is mandatory for government information systems due to OMB's Circular A-130 and the Federal Information Security Modernization Act \citeyear[p.~2]{sp80053r5}.} Most tailored uses of RMF, whether FedRAMP's particular use or that of a federal agency security program, mandate implementation of control CA-7, requiring an organization to establish an continuous monitoring program \citeyear[pp.~90-91]{sp80053r5}. Moreover, the NIST RMF controls refer to the agency's companion standard for design and implementation of continuous monitoring of federal systems, Special Publication 800-137 \citeyear{sp800137}. Similarly to SP 800-53, statute requires most federal agencies to follow this guidance. Unsurprisingly, FedRAMP used it as a blueprint for the Continuous Monitoring Program, which will be described further in Section \ref{conmon}.
+
+\subsection{FedRAMP History and Continuous Monitoring}
+
+Per its official website, the Federal Risk Authorization and Risk Management Program, more popularly known as just FedRAMP, is ``a government-wide program that promotes the adoption of secure cloud services across the federal government by providing a standardized approach to security assessment, authorization, and continuous monitoring for cloud products and services'' \citeyear{fedramp_definition25}. Given the spending and impact of cloud services for the government's digital services as described in Section \ref{economics}, it is not surprising that the whole program has evolved many times over fourteen years, not just for the continuous monitoring portion.
+
+Therefore, it is important to highlight relevant history and the current state of FedRAMP continuous monitoring processes as it pertains to continuous monitoring.
+
+\subsubsection{History} \label{fedramp_history}
+
+The Federal Chief Information Officer formally established FedRAMP in 2011. The goal of FedRAMP was to determine how to best perform security authorizations and, the central topic of this paper, continuous monitoring for multi-agency systems outsourced to cloud service providers \cite[p.~239]{metheny17}. These problems were hardly new to government technologists or early cloud service providers, but what was novel with FedRAMP was a centralized risk management and continuous monitoring program.
+
+To unify the varying information security and privacy management programs across the federal government, the original design focused on three areas: authorization, continuous monitoring, and federal security requirements \cite[p.~240]{metheny17}. This design based the ``assess once, reuse anywhere in government'' model by adapting the NIST RMF. As described in Section \ref{rmf}, the continuous monitoring approach embraced by FedRAMP, and later other cybersecurity frameworks, stems from its basis in the RMF. The fledging FedRAMP Program Management Office (PMO) announced this design publicly after eighteen months of stakeholder collaboration for public feedback in November 2010 \cite[p.~240]{metheny17}.
+
+After more collaboration, the Federal Chief Information Officer published the \textit{Security Authorization of Information Systems in Cloud Computing Environments}, formally establishing the initial organizational structure of FedRAMP and its methodology \cite[p.~241]{metheny17}. Not only did define the initial organizational structure, the memo instructed the PMO to create ``[i]n coordination with DHS, a framework for continuous monitoring, incident response and remediation, and FISMA reporting'' \citeyear[p.~3]{secauthmemo11}.
+
+There were many changes from 2011 to 2021, by FedRAMP's own admission, that ``focused on continued evolution — from redesigning processes to increasing transparency, or re-focusing on security while streamlining documentation,'' \citeyear{fedramp_blog_retrospective21}, but the general organizational structure and overall process remained the same.
+
+Significant organizational and process changes occurred in two phases for FedRAMP, the ``FedRAMP Act Phase'' (from December 2022 to March 2025) and the ``20x Phase'' from March 2025 to present.
+
+From 2021 to 2022, Congress proposed legislation to fully codify FedRAMP into law, not only depend on the OMB's executive direction.\footnote{If not fully codified into law, the the permanence of FedRAMP's authority and funding could be curtailed or removed by successive executive action.} By December 2022, the FedRAMP Act was integrated with the National Defense Authorization Act for Fiscal Year 2023 \cite{ndaa2023}. In FedRAMP's blog post, they hinted at ``additional information on how the Act may impact our stakeholders in the near future, including more information on the new Federal Secure Cloud Advisory Committee'' \citeyear{fedramp_blog_ndaa2023}. Soon after, FedRAMP and OMB refined and published their plan for a new organization, approach, and resulting processes. The final OMB memo, M-24-15, complemented this innovative strategy of the FedRAMP Act with big tactical moves to match. As Section \ref{conmon} will explain, the Joint Authorization Board (JAB) was the multi-agency board that shepherded heavily leveraged cloud providers (or put differently, the ``cloud providers of the cloud providers'') and those providers used for the high risk use cases (those with the coveted FedRAMP High Impact Level designation). As this memo was published, the FedRAMP PMO announced the rollout of new authorization paths and hinted at the dissolution of the JAB, alluding to ``details about how these changes will impact [cloud service providers] with provisional authorizations issued by the \textit{former JAB} [emphasis added]'' \citeyear{fedramp_blog_phase24}. The PMO piggybacked on the memo to mandate the use of \href{https://pages.nist.gov/OSCAL}{NIST's Open Security Control and Assessment Language} for completely digital authorization packages\footnote{In the parlance of FedRAMP stakeholders, digital authorization packages were to be machine-readable collections of data for automated processing and dynamic presentation to stakeholders with different personas. This artifact contrasted the contemporary state of affairs, where FedRAMP packages were static documents almost exclusively edited and viewed with the Microsoft Office and PDF readers, using \href{https://web.archive.org/web/20250524170225/https://www.fedramp.gov/rev5/documents-templates/}{the templates the PMO provided}.} and long-awaited automation for the authorization and continuous monitoring of cloud services \citeyear{fedramp_blog_phase24}. Not soon after, the PMO announced they would host an automation platform for cloud service providers and auditors to integrate directly with FedRAMP's program \citeyear{fedramp_blog_platform24}. These announcements were a significant step in actionable progress to automating FedRAMP processes and reducing a growing backlog of cloud services awaiting authorization or reauthorization.
+
+Despite the focused vision and speed in the PMO during the ``FedRAMP Act Phase,'' the PMO soon pivoted strategy in the ``20x Phase.'' In March 2025, FedRAMP announced this surprise shift in direction with a new modernization program called 20x \citeyear{fedramp_blog_20x}. Instead of the new alternatives proposed to high impact and high risk JAB authorizations in the ``FedRAMP Act Phase,'' only legacy agency authorizations would remain \citeyear{fedramp_blog_20x}. Talk of the automation platform disappeared, alongside many other initiatives of the last year. Instead, the PMO announced that ``FedRAMP will not build on the old ways to consolidate resources and services that turn FedRAMP into a slow bureaucratic behemoth operating on behalf of the entire government. Instead, FedRAMP will clear the way for the development of new paths that focus on true security and eliminate the inefficiencies, making central services unnecessary'' \citeyear{fedramp_blog_20x}. This announcement was a stark change, and later the FedRAMP Director and other staff would reveal more details. The director admitted that ``[his staff] canceled [the FedRAMP Platform project contract] in February as the new administration directed reductions in unnecessary spending because the overall project would've cost more than FedRAMP's \textit{entire current budget}'' \citeyear{20x_waterman_platform_comment}. With this rapid shift to industry-led approach and rejection of previous strategies, Curran reported that the PMO let its longstanding contract for eighty contractors supporting day-to-day PMO operations lapse, and only eighteen government employees remained \citeyear{curran25}. The remaining staff were to support the existing program, including continuous monitoring, and this modernization effort. As the title's article implied, FedRAMP officials detailed the planned unwinding of continuous monitoring, and most of FedRAMP's extant processes as well.
+
+\subsubsection{Continuous Monitoring} \label{conmon}
+
+Although there have been significant changes, the FedRAMP PMO continue to operate a limited version of the continuous monitoring with reduced staff. Although there have been changes over the last decade, the Continuous Monitoring Program has operated with largely the same general approach and operational workflow until the ``FedRAMP Act Phase'' and the dissolution of the JAB.
+
+Continuous monitoring, despite being similar to first authorization, is one of the last steps in the FedRAMP authorization cycle, as Figure \ref{fig:conmon1} in the appendix shows. After initial authorization, a cloud provider coordinated with the PMO and JAB for monthly continuous monitoring directly or with directly with the agency customer who reported to FedRAMP. The general process, as discussed before, was inspired NIST Special Publication 800-53 and 800-137 for mechanics of ``ConMon,'' as stakeholders frequently call it. FedRAMP published the \textit{FedRAMP Collaborative ConMon QuickGuide} for CSPs, auditors, and customer agencies to know the process requirements and expectations \citeyear{fedramp_cmqg23}.
+
+This guide outlines the overarching process, very little of which is automated. Cloud providers must schedule meetings with FedRAMP officials, send updated inventory records in FedRAMP's Excel spreadsheet template, collect vulnerability scans from various providers, and action plan for open vulnerabilities and interim mitigations (or POA\&M), and manually upload it via the connect.gov website.\footnote{For some FedRAMP High Impact systems, the PMO did not require the provider to use connect.gov, but a repository of their own that was within the scope of their service, further increasing delays and complexity to deliverable upload, review, and coordination, but at a minor benefit to larger cloud providers that enjoyed more control over the data.} This process can be further complicated by any significant change outside of routine maintenance (known as Significant Change Request, or SCR), which required additional documentation, customer approval, and review by third-party auditors \cite{fedramp_cmqg23}. Much of this very routine work, highly conducive to automation, but has remained a source of significant toil.\footnote{Although FedRAMP dissolved the JAB in the ``FedRAMP Act Phase'' and the higher intensity ConMon process shepherded by the JAB was being decommissioned, this process was gradual. FedRAMP staff could not simply drop providers transitioning to alternative authorization paths could not just stop in weeks or months, especially without resistance or pushback from the provider's customers who enjoyed more assurance from the previous JAB workflow with less direct effort. The obsolescence of the new alternative authorization paths during the ``20x Phase'' further complicated matters for these providers and the ambiguity of continuous monitoring.}
+
+\subsubsection{20x, Looking Backwards and Forwards} \label{20x}
+
+Although FedRAMP announced the 20x program in March 2025 to modernize authorization and continuous monitoring processes, various FedRAMP stakeholders understandably employed constructive criticism of FedRAMP's current processes to argue for a future FedRAMP of their own making in FedRAMP's public GitHub forums. For this research, I created an archive of over 1,500 posts and replies between March and June 2025.\footnote{This archive is accessible in Section \ref{20x_archive} in the appendix.} I then coded all comments and bucketed them into themes related to improving the continuous monitoring process.\footnote{The raw data for coding these comments is accessible via Section \ref{20x_archive_coded} in the appendix.}
+
+Below are the most important themes from this analysis my approach to mutual monitoring.
+
+\begin{itemize}
+    \item It is vital that cloud providers can leverage their own cloud providers' data.
+    \item Some want FedRAMP to stay centralized, others want and decentralization, each camp with its own merits and trade-offs.
+    \item There is significant interest in improving digital trust mechanisms, like digital signatures.
+    \item It is important to improve timely report submission and verification.
+    \item Even if foundational, proper inventory management is complex.
+    \item There is lots of opportunity to improve the economics and incentives of FedRAMP.
+    \item Many propose OSCAL solutions, but real-world use for FedRAMP is difficult.
+\end{itemize}
+
+\section{Solution}
+
+Given the history and context of FedRAMP's Continuous Monitoring Program, themes from 20x criticism strongly suggest a winning architecture requires stakeholders easily collaborate in a technology that underpins a robust process. People, process, and tools must be combined; the latter two cannot be tacked on later. This section describes the recent history of transparency services and how the mutual monitoring architecture is a foundation to this balance of people, process, and tools.
+
+\subsection{Mutual Monitoring Transparency Service}
+
+To transform FedRAMP's continuous monitoring to mutual monitoring, cloud service providers, auditors, and agency customers must coalesce around tools that consistently orchestrate processes. The foundational building block for this consistency is the  specification that adapts transparency service architecture, popular for other use cases, to cloud service monitoring.\footnote{For the history of transparency services and predecessor use cases, see Section \ref{use_cases} in the appendix.} Although the specification is highly applicable to FedRAMP use cases, the specification is generic and not particular to FedRAMP. The sections below will highlight key elements of the full specification, included in Section \ref{architecture}, and relate it to FedRAMP's specific needs.
+
+\subsubsection{Document Format, Conventions, and Terminology}
+
+The mutual monitoring specification intentionally approximates, but does not explicitly use, the format that the Internet Engineering Task Force (IETF) prefers for its consensus and standardization process \citeyear{ietf_authors_format}. Given this stage in the research, it is premature to formally publish a draft as part of the Request for Comment process, and becomes the intellectual property of the IETF once submitted. Nonetheless, this specification is customizing a generic architecture from another IETF specification, so it is prudent to approximate this format for possible publication as an IETF Internet Draft at a later date. 
+
+This document extends and customizes the IETF Supply Chain Integrity, Transparency, and Trust (SCITT) Working Group's SCITT Architecture specification \citeyear{scitt25}. The SCITT architecture is distinct, but has significant overlap from the latest and original Certificate Transparency specifications, which are also established IETF standards (\href{https://datatracker.ietf.org/doc/html/rfc9162}{RFC 9162} and \href{https://datatracker.ietf.org/doc/html/rfc6962}{IETF RFC 6962}, respectively). Moreover, approximating the IETF format with a tentative plan for possible IETF publication makes it convenient and approachable to implementers of related standards and the underlying normative references for transparency service building blocks.
+
+As it is approximating IETF style, it is important to call out the conventions and terminology. For an effective specification, not just for transparency services, this specification uses \href{https://datatracker.ietf.org/doc/html/rfc2119}{RFC 2119} keywords, which many standards authors outside of IETF have adopted as well. The specification also makes heavy use of capitalized terminology itemized in the terminology section, like other IETF documents, and refers the reader to the normative definitions elsewhere if possible. As is good practice, this specification references upstream normative documents, and does not repeat or reframe those sources. This specification only adds information to extend those upstream references.
+
+\subsubsection{Use Cases}
+
+Like other IETF drafts, crisp, relevant use cases are integral to an effective specification. Although seemingly generic, these two use cases \href{https://aj-stein.github.io/conmotion/architecture.html#use-cases}{in this section of the document} are specifically chosen for their relevance to FedRAMP and an improved alternative to the current continuous monitoring process.
+
+As explained in more detail in Section \ref{conmon}, capable, successful cloud service providers who perform continuous monitoring well require a solid foundation in inventory management. Incomplete coverage, inconsistency, and poor labeling are not uncommon for cloud service providers of all sizes and maturity in the current FedRAMP process. Having auditable, digitally signed records from a provider of its inventory sent for each creation, modification, and deletion event will mitigate all three of these challenges in inventory management. Additionally, current third-party auditors for FedRAMP are very familiar with the necessity and scanning techniques to detect publicly available infrastructure, potentially the creation, modification, or deletion of inventory items that cloud service provider did not report. This possible delta, or potential lack thereof, is an easily understandable for measuring inventory coverage as part of the quantitative framework.
+
+Similarly, the configuration management use case is foundational to capable, successful cloud service providers who perform well in the current continuous monitoring process. In the case of FedRAMP, this use case builds upon the previous inventory management use case. During annual assessments, and particularly for significant change requests, providers and auditors must work with FedRAMP PMO staff and the customer agency to articulate what changes happen to the system for new or updated components of a cloud service. This approach allows automated monitoring and the use of tags to map inventory to configuration changes and vice versa.
+
+These use cases start simple, but the reader can consider advanced scenarios that realize the mutual monitoring flow. The primary scenario is for a cloud service provider to contract with one or more third-party auditors to monitor their infrastructure. For a more advanced scenario with mature adoption that reflects ``fuller'' mutual monitoring, the cloud provider can play the role of the auditor in later interactions: they may condition permission for access to more detailed security information for a new auditor, or potential customer agency, that wishes to receive the provider's more detailed security data based upon their scored performance of that infrastructure . A ``leveraged'' cloud service provider (i.e. a the cloud provider that is vendor to a downstream cloud provider) can condition access to their security data upon the performance of this new cloud provider with their new infrastructure, rather than a centralized government review scoped to only federal and military staff.
+
+\subsubsection{Architecture Components}
+
+For the transparency service to be robust, it is important that it has a modular architecture to account for different performance trade-offs and flexibility to only deploy the right components for a given use case. \href{https://aj-stein.github.io/conmotion/architecture.html#components}{This section of the specification} describes the components accordingly, inspired by the SCITT Architecture: the core transparency service and optional adjacency services.
+
+The core transparency service contains sub-components to implement the minimally viable capabilities of an Append-Only Log. The first necessary sub-component is the Registration Policy API, which defines the list of allowed identities (in the form of X.509 digital certificates) permissible for signing Statements. If the Issuer's signing certificate, whether for a cloud provider or auditor, is not allowed in the Registration Policy, Registration fails. In this way, Issuer authentication and authorization originates from the Statement, not bespoke API mechanisms.
+
+When Issuers use another sub-component, the Submission API, any other form of authentication or authorization is not mandatory, simplifying integration. This API does not have to immediately return a receipt (i.e. a Statement countersigned by the Transparency Service itself). To support high throughput, the service will return a task ID and status for the client software, the Relying Party, to poll for. The Relying Party can then use the Entry API to look up tasks or existing Statements after Registration. 
+
+The final sub-component of the core is the Entry API. This final sub-component is to look up registered records. The Append-Only Log allows for bulk lookups to ``replay the log'' for consistency proofs (no tampering has occurred on the sequence of statements about inventory or configuration items). More commonly, Relying Parties will perform inclusion proofs (lookups for individual records is in the log to confirm they exist at a particular order in the sequence). As mentioned above, the Entry API also implements a task lookup functionality for Relying Parties to poll for the status of Registration for a given Statement. By combining all three sub-components, cloud service providers or auditors can check submission requirements, submit, and look up existing records for proof of existence.
+
+One important consideration for scaling this architecture to efficiently process millions of Statements is Adjacent Services to store and query the full payload of the data independently from the core Transparency Service. In a simpler version of the architecture, the whole inventory or configuration record is signed and submitted. With this more modular architecture, the Relying Party opts to submit the payload itself to an Adjacent Storage Service. The service will store the raw data of payload, and return a hash formed from key record elements (the inventory identifier or configuration identifier). The Adjacent Search Service will be deployed with the Storage Service to perform reverse lookups for query matches and returning the hash that positively matches the arguments for queries. This keeps the size of the signed payload of the Statement lean and custom or advanced query features out of the high-bandwidth core system. The ``happy path'' for the core is purely Registration of Statements and using the Entry API for consistency and inclusion proofs.
+
+\subsubsection{Flows, Example Statements, and the Quantitative Framework}
+
+The \href{https://github.com/aj-stein/practicum/pull/1}{flow section} and \href{https://aj-stein.github.io/conmotion/architecture.html#example-statements}{example statements section} of the appendix bring the architecture's building blocks together to demonstrate how multiple parties produce and consume measurements using a simple quantitative framework. In the data flows of the specification, a reader can understand how a cloud service provider integrates an existing inventory management system. As an Issuer, the cloud provider uses its Relying Party software to submit the original Statement (an inventory or configuration management event in the \href{https://schema.ocsf.io/}{Open Cybersecurity Schema Format}) to the cloud provider's own Adjacent Storage Service, which then pushes indexed fields to cloud provider's Adjacent Search Service, and returns the hash of the key fields.\footnote{In the ``20x Phase'' of FedRAMP, different community members demonstrated OSCAL capabilities, but the FedRAMP PMO distanced itself its previous OSCAL work and never tacitly endorsed any OSCAL-based solution after the cancellation of the platform project. Therefore, this project substitutes OSCAL for OCSF, which is gaining popularity with large FedRAMP cloud providers, like AWS, and their preferred SIEM partners, like Splunk.} The Relying Party then uses its Certificate and Signing Key to digitally sign the hash and submit it to the cloud service provider's Transparency Service and the auditor's Transparency Service. The cloud service provider's Relying Party waits briefly for the Receipt of Registration from the auditor's transparency service. Once it receives that, it adds a new Transparent Statement, embedding the Receipt into the unprotected header of the original Signed Statement (with a hash as payload, not including the Receipt that did not yet exist), registering this updated ``transparent'' copy to the cloud provider's Transparency Service. This approach allows the cloud provider to verifiably prove it detected the inventory event and had an auditor countersign it. 
+
+At this stage, the auditor's infrastructure will look for any inventory or configuration event that is anomalous and not initially reported by the cloud provider by checking provider's Adjacent Search Service and any hashes returned to confirm a finding that is not a false positive. If it detects changes the cloud provider made without notice, it the auditor's Relying Party software uses its own key to make a record of this anomaly, updating the auditor's Transparency Service. Periodically, the auditor service will register measurement events with quantitative measurements. Such records will calculate the number of valid cloud provider records divided by the sum of cloud provider records and auditor findings from the epoch (i.e. the point in the auditor's Append-only log for the first successful Registration of inventory or a configuration by the cloud provider). It can differentiate the Issuers to properly sum the numerator and denominator by classifying records based upon the Issuers' signing keys.\footnote{At this time, the quantitative framework only measures from the epoch, or the first successful Registration of a Statement by a cloud provider in the auditor's Transparency Service, until present. In future designs, for a more complex and adaptive quantitative framework, the auditor's Relying Party can introspect its own Registration Policy to determine ad hoc requirements for the measurement payload, such a custom time range, freshness, or filtering requirements.}
+
+For a customer agency building dashboards or analytics software, their Relying Party software can read the whole history of the auditor's Append-only Log or filter only on measurement records, allowing it to have a verifiable source of metrics for a cloud provider. As the ecosystem stabilizes, a customer agency can aggregate different measurements from multiple third-party auditor services, with each with different specialties or niches, for a more robust assessment. All parties can change roles conditionally from their vantage point as well, such they can use this framework to mutually monitor each other.
+
+\section{Evaluation}
+
+\subsection{Method and Results}
+
+Evaluation of the mutual monitoring design took a two-pronged approach: modeling the development and operations costs of transparency services and qualitative surveys with different FedRAMP stakeholders.
+
+For quantitative analysis, I modeled the cost of FedRAMP's continuous monitoring process for different stakeholders. From this modeling, it is clear mutual monitoring development and operations can provide significant efficiencies. In 2024, Jason Miller reported that the FedRAMP PMO opted to not extend a \$64 million dollar contract with Noblis, FedRAMP's primary contractor for authorization and continuous monitoring operations, and cancelled their recently awarded contract with USAI for a centralized GRC platform \citeyear{miller25}. Per G2xchage, USAI's average contract cost for deploying the same GRC service internally to other agencies is approximately \$4 million dollars total \citeyear{g2xchange_usai25}. stackArmor analysts had conservatively estimated that FedRAMP projects can cost the cloud service providers between \$250,000 to \$750,000 dollars, and continuous monitoring support constitutes from \$100,000 to \$400,000 of that amount \citeyear{stackarmor24}. In terms of duration, staff from all stakeholders would have to wait for monthly assessments and it would take, at least, several hours a week every month to complete continuous monitoring review meetings and out-of-band communication. Conservatively estimating 10\% of the combined budgets and a staff of five people, the budget to develop and operate a mutual monitoring service with automated verification would have to exceed \$7 million dollars. Berifying each transaction would have to take hours to completeto be less inefficient than the equivalent continuous monitoring process. That scenario is quite unlikely given the current performance of comparable Certificate Transparency and Sigstore instances, with similar  staff count developing and operating transparency services that can process seventy requests a second, or six million records per day \cite{valenta25}.
+
+For qualitative analysis, I performed ten user experience interviews with FedRAMP stakeholders of various training, experience, and background. The questions were to measure agreement with themes of criticism gleaned from analyzing 20x forums as described in Section \ref{20x}. I compiled twenty five questions, each with answers mapping to Likert Scale scores of -2, -1, 0, 1, and 2, with the range representing most negative to neutral to most positive outlook for answer sentiment. I also noted the rationale for each answer when offered. For participants, important features for future FedRAMP processes were support for raw data submission; support for compositional data using data from the cloud provider's providers; better significant change tracking; accurate third-party auditor measurement; better economic incentives; decentralization; and very strong support for improved digital signature support. Participants favored several architecture capabilities that are lacking in my current design, including confidential and privacy-preserving data access, as well as OSCAL-first data encoding. Therefore, I conclude from qualitative analysis that those interviewed would have good or fair, but not overwhelming, support for this architecture until future work improved upon key limitations.
+
+\subsection{Limitations and Future Work}
+
+A key limitation of this research was an incomplete prototype implementation in Python,\footnote{To review the code, please see Section \ref{prototype} in the appendix.} which I intend to continue in the future. Additionally, qualitative analysis from survey answers highlight the urgency and importance for confidential data storage and privacy-preserving queries across party boundaries. In the long-term, survey interviews confirmed much more research is needed into the economic incentives for quantitative measurements that are based in business cases that would allow cloud services and auditors to differentiate themselves with transparency. The inventory and configuration management use cases are simple and approachable to bootstrap implementation, but much more focus is needed for more actionable measurement use cases to drive incentives for real-world use.
+
+\subsection{Conclusion}
+
+As one highly experienced FedRAMP stakeholder confided in an interview, what he most wants from FedRAMP in the future is ``continuous transparency,'' not the ``every thirty day transparency'' we currently have. This statement quite eloquently summarizes the challenges to FedRAMP and the need to replace human-driven bureaucracy with a new holistic approach that balances people, process, an, most importantly, automated tools. FedRAMP has particularly neglected the latter, despite plans to the contrary. I believe the mutual monitoring architecture is a promising step in that direction. Future prototyping and evaluation of mutual monitoring services will incontrovertibly prove that these centralized bureaucracies are no longer a viable option.
+
+\bibliographystyle{apacite}
+\bibliography{references.bib}
+
+\section{Appendix}
+
+\subsection{Transparency Services for Other Use Cases} \label{use_cases}
+
+The first and most notable use case for transparency services is Certificate Transparency. By 2011, Google had decided, in the wake of the DigiNotar certificate authority breach, that there were no acceptable existing solutions to detect misuse of web server certificates. So Laurie and a team of engineers decided the best solution was to``[create] a log of all certificates issued that does not need to be trusted because it is cryptographically verifiable ... [and] allows clients to check that certificates are in the log, and servers can monitor the log for misissued certificates'' \citeyear[p.~4]{laurie14}. There were a variety of alternatives, to be tried in isolation or combination, such as certificate pinning, centralized certificate notaries, DNSSEC, and even solutions implemented with Bitcoin, but all presented different downsides and tradeoffs that did not meet the mark.\footnote{Despite the similarity to general-purpose blockchains such as Bitcoin, Laurie was explicit in using a purpose-built alternative for Google's security use case, after much research and experimentation. In his own words, ``[a]part from being an extremely costly solution (in terms of wasted energy, in perpetuity), it also introduces new trusted third parties (those who establish the “consensus” in the block chain) and has no mechanism for verification'' \citeyear[p.~4]{laurie14}.} The world's web browsers could not abide any latency, and decision-making could not be made with these end users' browsers. Browsers still had to check the logs however, and most importantly, interested intermediary parties (e.g. other certificate authorities, site operators, researchers) need to check the log. All the same, any one party from either category should know they have all seen the same log \cite[p.~7]{laurie14}. Even in this early stage, Laurie and his colleagues deployed several log instances to achieve this goal, with other organizations pledging to deploy their own experimental instances, as he imagined other novel use cases early on \citeyear[pp.~809]{laurie14}. By 2025, there are two major versions of the architecture (\href{https://datatracker.ietf.org/doc/html/rfc6962}{IETF RFC 6962} and \href{https://datatracker.ietf.org/doc/html/rfc9162}{RFC 9162}), \href{https://certificate.transparency.dev/logs/}{six organizations with public logs} used by major browsers (Chrome, Firefox, and Safari) to verify website certificates before a browser effectively communicates with a valid, but not yet sufficiently trusted, web server encryption certificate.
+
+After certificate transparency proved successful, implementers applied it to other security use cases, like improved digital signature publication for software supply chain monitoring. The \href{https://sigstore.dev}{Sigstore} project, and its publicly available, Internet-scale \href{https://rekor.sigstore.dev/}{Rekor log instance}, allows developers to use ``a transparency log-backed signing repository with minimal friction for integration, while maintaining reasonable security guarantees'' \cite[p.~2365]{newman22}. At the time of this writing, the registries of open-source libraries for NodeJS and Python, among the largest programming language ecosystems in the world, integrate Sigstore in their package signature verification. Another major programming language ecosystem, Go, built a similar, but different, implementation of a transparency log for their open-source registry of software libraries \cite{hockman19}.
+
+\subsection{Mutual Monitoring Architecture} \label{architecture}
+
+The complete architecture specification is accessible at \href{https://aj-stein.github.io/conmotion/architecture.html}{aj-stein.github.io/conmotion}. Additionally, readers can download \href{https://aj-stein.github.io/conmotion/architecture.pdf}{a copy of the specification in PDF format} for offline reading.
+
+\subsection{Initial Prototype Source Code} \label{prototype}
+
+Although incomplete, the code for the initial prototype is saved alongside the specification in the \href{https://github.com/aj-stein/conmotion/tree/main/conmotion}{github.com/aj-stein/conmotion repository on GitHub}.
+
+\subsection{20x Forum Archive} \label{20x_archive}
+
+In June 2025, PMO staff archived posts and subsequently disabled public access to 20x forums created before consolidating the original four discussion boards into one, \href{https://github.com/FedRAMP/community/discussions}{the FedRAMP/community discussion board}.
+
+To facilitate research for this project, I wrote a \href{https://github.com/aj-stein/practicum_conmon_analysis/blob/e0baba42dda242b137fa7ab583a3ceaecaf1e94f/src/download_discussions.py}{Python script} to export all this public domain content from the four pre-existing discussion boards into a complete archive in Markdown format. This archive in a subdirectory of the \href{https://github.com/aj-stein/practicum\_conmon\_analysis/tree/e0baba42dda242b137fa7ab583a3ceaecaf1e94f/data/fedramp}{github.com/aj-stein/practicum\_conmon\_analysis} repository.
+
+\subsection{Coded 20x Forum Posts} \label{20x_archive_coded}
+
+As part of this research, I reviewed all archived posts from the 20x forum, as described in Section \ref{20x_archive} and coded each one to confirm if there was relevant criticism for pre-20x FedRAMP processes, specifically continuous monitoring. If so, I organized each one into one or more thematic buckets to inform the design of the mutual monitoring service.
+
+The coded posts labelled by theme can be found in \href{https://gist.github.com/aj-stein/ffa8bdbe5674a59159d4850aa16fb142}{this GitHub Gist}.
+
+\subsection{User Experience Interview Questions} \label{questionnaire}
+
+\begin{enumerate} 
+    \item How effective is the current max.gov/connect.gov approach for uploading data to FedRAMP? Have you ever requested to see it security package? If so, did you gain access?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How well do current FedRAMP processes (prior to March 2025) enable a cloud service provider to use information from other providers they leverage in their product to implement and document their security posture?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to a consuming CSP to directly use and share information from other providers they leverage?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How well do current FedRAMP processes (prior to March 2025) support submission of raw data (e.g. security scanner outputs) in authorization and continuous monitoring processes?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to support submission of raw data for authorization and continuous monitoring?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to support to summarization and linking raw data for authorization and continuous monitoring with submitting it?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How important is OSCAL to your use case with FedRAMP and its current processes (prior to March 2025)?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How important is OSCAL to your use case with FedRAMP modernized processes?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in supporting your use cases with digital signatures and other digital forms of trust and/or verification?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How often did you use digital signatures for current FedRAMP processes (before March 2025)?
+    \begin{enumerate}
+        \item [-2] Very infrequently
+        \item [-1] Infrequently
+        \item  [0] Neither frequently nor infrequently
+        \item  [1] Frequently 
+        \item  [2] Very frequently
+    \end{enumerate}
+    \item How important are digital signatures and other digital verification methods for your use cases in FedRAMP's modernized processes?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in facilitating the use of common security scanning techniques to accurately identify vulnerabilities in a cloud service provider's infrastructure?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to better support common security scanning techniques to accurately describe cloud service provider's infrastructure?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in submitting and tracking significant change requests in progress and over the history of the system?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to facilitate easily submitting and easily tracking significant change requests in progress and over the history of the system?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in managing and communicating vulnerability management information?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to facilitate clear communication of a service's current vulnerability management and its historical trends?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in securing sensitive data and keeping it confidential?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to secure sensitive data and keep it confidential?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes in identifying and measuring 3PAO performance for past and present assessments?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP's modernized processes to identify and measure 3PAO performance for past and present assessments?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are FedRAMP's current processes (before March 2025) in economically incentivizing CSPs to maintain an authorization?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for modernized FedRAMP processes to incentivize CSPs economically to maintain authorizations?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+    \item How effective are current FedRAMP processes in centralized management of continuous monitoring data?
+    \begin{enumerate}
+        \item [-2] Very ineffective
+        \item [-1] Ineffective
+        \item  [0] Neither effective nor ineffective
+        \item  [1] Effective 
+        \item  [2] Very effective
+    \end{enumerate}
+    \item How important is it for FedRAMP processes to decentralize management of continuous monitoring data?
+    \begin{enumerate}
+        \item [-2] Very unimportant
+        \item [-1] Unimportant
+        \item  [0] Neither important nor unimportant
+        \item  [1] Important
+        \item  [2] Very important
+    \end{enumerate}
+\end{enumerate}
+
+\subsection{Diagrams}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics{assets/process_pre20x.png}
+    \caption{FedRAMP processes before 20x}
+    \label{fig:conmon1}
+\end{figure}
+
+\end{document}
